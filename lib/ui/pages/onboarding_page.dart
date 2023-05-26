@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/ui/pages/auth/sign_in_page.dart';
+import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -88,97 +90,68 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   SizedBox(
                     height: currentIndex == 2 ? 38 : 50,
                   ),
-                  currentIndex == 2 ?
-                  Column(
-                    children: [
-                      SizedBox(
-                        height: 50,
-                        width: double.infinity,
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: purpleColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(56))),
-                            onPressed: () {
-                              carouselController.nextPage();
-                            },
-                            child: Text(
-                              'Continue',
-                              style: whiteTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: semiBold),
-                            )),
-                      ),
-                      const SizedBox(height: 20,),
-                      SizedBox(
-                        height: 24,
-                        width: double.infinity,
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
+                  currentIndex == 2
+                      ? Column(
+                          children: [
+                            ButtonWidget(
+                              title: 'Get Started',
+                              onPressed: () {
+                                Navigator.pushNamedAndRemoveUntil(context, '/sign-up', (route) => false);
+                              },
                             ),
-                            onPressed: () {
-                              // carouselController.nextPage();
-                            },
-                            child: Text(
-                              'Sign In',
-                              style: greyTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: semiBold),
-                            )),
-                      )
-                    ],
-                  )
-                  : Row(
-                    children: [
-                      Container(
-                        width: 12,
-                        height: 12,
-                        margin: const EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: currentIndex == 0
-                                ? blueColor
-                                : greyBackgroundColor,
-                            shape: BoxShape.circle),
-                      ),
-                      Container(
-                        width: 12,
-                        height: 12,
-                        margin: const EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: currentIndex == 1
-                                ? blueColor
-                                : greyBackgroundColor,
-                            shape: BoxShape.circle),
-                      ),
-                      Container(
-                        width: 12,
-                        height: 12,
-                        margin: const EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: currentIndex == 2
-                                ? blueColor
-                                : greyBackgroundColor,
-                            shape: BoxShape.circle),
-                      ),
-                      const Spacer(),
-                      SizedBox(
-                        height: 50,
-                        width: 150,
-                        child: TextButton(
-                            style: TextButton.styleFrom(
-                                backgroundColor: purpleColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(56))),
-                            onPressed: () {
-                              carouselController.nextPage();
-                            },
-                            child: Text(
-                              'Continue',
-                              style: whiteTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: semiBold),
-                            )),
-                      )
-                    ],
-                  )
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            CustomTextButton(
+                              title: 'Sign In',
+                              onPressed: () {
+                                Navigator.pushNamedAndRemoveUntil(context, '/sign-in', (route) => false);
+                              },
+                            )
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  color: currentIndex == 0
+                                      ? blueColor
+                                      : greyBackgroundColor,
+                                  shape: BoxShape.circle),
+                            ),
+                            Container(
+                              width: 12,
+                              height: 12,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  color: currentIndex == 1
+                                      ? blueColor
+                                      : greyBackgroundColor,
+                                  shape: BoxShape.circle),
+                            ),
+                            Container(
+                              width: 12,
+                              height: 12,
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: BoxDecoration(
+                                  color: currentIndex == 2
+                                      ? blueColor
+                                      : greyBackgroundColor,
+                                  shape: BoxShape.circle),
+                            ),
+                            const Spacer(),
+                            ButtonWidget(
+                              width: 150,
+                              title: 'Continue',
+                              onPressed: () {
+                                carouselController.nextPage();
+                              },
+                            )
+                          ],
+                        )
                 ],
               ),
             )

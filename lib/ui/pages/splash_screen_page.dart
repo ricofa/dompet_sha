@@ -17,8 +17,8 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     // TODO: implement initState
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const OnboardingPage()));
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/onboarding', (route) => false);
     });
   }
 
