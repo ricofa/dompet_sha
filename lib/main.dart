@@ -5,6 +5,7 @@ import 'package:dompet_sha/ui/pages/auth/sign_up_set_profile.dart';
 import 'package:dompet_sha/ui/pages/auth/sign_up_success_page.dart';
 import 'package:dompet_sha/ui/pages/home/home_page.dart';
 import 'package:dompet_sha/ui/pages/onboarding_page.dart';
+import 'package:dompet_sha/ui/pages/profile/profile_page.dart';
 import 'package:dompet_sha/ui/pages/splash_screen_page.dart';
 import 'package:flutter/material.dart';
 
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/sign-up-set-idcard' : (context) => const SignUpSetIdCard(),
         '/sign-up-success' : (context) => const SignUpSuccessPage(),
         '/home' : (context) => const HomePage(),
+        '/profile' : (context) => const ProfilePage(),
       },
     );
   }
