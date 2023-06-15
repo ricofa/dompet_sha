@@ -39,7 +39,13 @@ class CustomTextButton extends StatelessWidget {
   final double width;
   final double height;
   final VoidCallback? onPressed;
-  const CustomTextButton({Key? key, required this.title, this.width = double.infinity, this.height = 24, this.onPressed}) : super(key: key);
+  const CustomTextButton(
+      {Key? key,
+      required this.title,
+      this.width = double.infinity,
+      this.height = 24,
+      this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +59,35 @@ class CustomTextButton extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             title,
-            style: greyTextStyle.copyWith(
-                fontSize: 16, fontWeight: semiBold),
+            style: greyTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
           )),
     );
   }
 }
 
+class InputPinButton extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+  const InputPinButton({Key? key, required this.title, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: numberBgColor,
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: whiteTextStyle.copyWith(fontSize: 22, fontWeight: semiBold),
+          ),
+        ),
+      ),
+    );
+  }
+}

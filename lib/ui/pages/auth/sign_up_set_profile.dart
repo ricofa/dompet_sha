@@ -14,7 +14,6 @@ class _SignUpSetProfileState extends State<SignUpSetProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: greyBackgroundColor,
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [

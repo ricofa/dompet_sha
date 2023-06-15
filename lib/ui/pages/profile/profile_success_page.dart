@@ -2,14 +2,14 @@ import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
-class SignUpSuccessPage extends StatefulWidget {
-  const SignUpSuccessPage({Key? key}) : super(key: key);
+class ProfileSuccessPage extends StatefulWidget {
+  const ProfileSuccessPage({Key? key}) : super(key: key);
 
   @override
-  State<SignUpSuccessPage> createState() => _SignUpSuccessPageState();
+  State<ProfileSuccessPage> createState() => _ProfileSuccessPageState();
 }
 
-class _SignUpSuccessPageState extends State<SignUpSuccessPage> {
+class _ProfileSuccessPageState extends State<ProfileSuccessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,10 +18,10 @@ class _SignUpSuccessPageState extends State<SignUpSuccessPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Akun Berhasil\nTerdaftar',
+              'Your Account\nSuccessfully Updated',
               textAlign: TextAlign.center,
               style:
-                  blackTextStyle.copyWith(fontWeight: semiBold, fontSize: 20),
+              blackTextStyle.copyWith(fontWeight: semiBold, fontSize: 20),
             ),
             const SizedBox(
               height: 26,
@@ -34,7 +34,7 @@ class _SignUpSuccessPageState extends State<SignUpSuccessPage> {
             const SizedBox(height: 50),
             ButtonWidget(
               width: 183,
-              title: 'Get Started',
+              title: 'Return My Profile',
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/home', (route) => false);

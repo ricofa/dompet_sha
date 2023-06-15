@@ -14,15 +14,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: greyBackgroundColor,
         appBar: AppBar(
-          backgroundColor: greyBackgroundColor,
-          elevation: 0,
-          centerTitle: true,
-          iconTheme: IconThemeData(color: blackColor),
-          title: Text(
+          title: const Text(
             'My Profile',
-            style: blackTextStyle.copyWith(fontWeight: semiBold, fontSize: 20),
           ),
         ),
         body: ListView(
@@ -78,12 +72,20 @@ class _ProfilePageState extends State<ProfilePage> {
                   ProfileMenuWidget(
                     urlIcon: 'assets/icons/ic_profile.png',
                     title: 'Edit Profile',
-                    onTap: () {},
+                    onTap: () async {
+                      if(await Navigator.pushNamed(context, '/pin') == true){
+                        Navigator.pushNamed(context, '/profile-edit');
+                      }
+                    },
                   ),
                   ProfileMenuWidget(
                     urlIcon: 'assets/icons/ic_pin.png',
                     title: 'My Pin',
-                    onTap: () {},
+                    onTap: () async {
+                      if(await Navigator.pushNamed(context, '/pin') == true){
+                        Navigator.pushNamed(context, '/profile-edit-pin');
+                      }
+                    },
                   ),
                   ProfileMenuWidget(
                     urlIcon: 'assets/icons/ic_setting.png',

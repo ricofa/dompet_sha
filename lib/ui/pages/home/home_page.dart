@@ -16,7 +16,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: greyBackgroundColor,
         bottomNavigationBar: BottomAppBar(
           color: whiteColor,
           shape: const CircularNotchedRectangle(),
