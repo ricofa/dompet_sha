@@ -248,7 +248,9 @@ class _HomePageState extends State<HomePage> {
               MenuServicesWidget(
                 urlIcon: 'assets/icons/ic_topup.png',
                 title: 'Top up',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/topup');
+                },
               ),
               MenuServicesWidget(
                 urlIcon: 'assets/icons/ic_transfer.png',

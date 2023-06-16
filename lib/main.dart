@@ -12,6 +12,9 @@ import 'package:dompet_sha/ui/pages/profile/profile_edit_pin_page.dart';
 import 'package:dompet_sha/ui/pages/profile/profile_page.dart';
 import 'package:dompet_sha/ui/pages/profile/profile_success_page.dart';
 import 'package:dompet_sha/ui/pages/splash_screen_page.dart';
+import 'package:dompet_sha/ui/pages/topup/topup_amount_page.dart';
+import 'package:dompet_sha/ui/pages/topup/topup_page.dart';
+import 'package:dompet_sha/ui/pages/topup/topup_success_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -50,6 +53,9 @@ class MyApp extends StatelessWidget {
         '/profile-edit': (context) => const ProfileEditPage(),
         '/profile-edit-pin': (context) => const ProfileEditPinPage(),
         '/profile-success': (context) => const ProfileSuccessPage(),
+        '/topup': (context) => const TopUpPage(),
+        '/topup-amount': (context) => const TopUpAmountPage(),
+        '/topup-success': (context) => const TopUpSuccessPage(),
       },
     );
   }
