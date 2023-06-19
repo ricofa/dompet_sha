@@ -5,7 +5,14 @@ class FormFieldWidget extends StatelessWidget {
   final String title;
   final bool obscureText;
   final TextEditingController? controller;
-  const FormFieldWidget({Key? key, required this.title, this.obscureText = false, this.controller}) : super(key: key);
+  final bool isShowTitle;
+  const FormFieldWidget(
+      {Key? key,
+      required this.title,
+      this.obscureText = false,
+      this.controller,
+      this.isShowTitle = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +20,21 @@ class FormFieldWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // input field
-        Text(
-          title,
-          style: blackTextStyle.copyWith(fontWeight: medium),
-        ),
-        const SizedBox(
-          height: 8,
-        ),
+        if (isShowTitle)
+          Text(
+            title,
+            style: blackTextStyle.copyWith(fontWeight: medium),
+          ),
+        if (isShowTitle)
+          const SizedBox(
+            height: 8,
+          ),
         TextFormField(
           controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
-              contentPadding: EdgeInsets.all(12),
+            hintText: !isShowTitle ? title : null,
+              contentPadding: const EdgeInsets.all(12),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
               )),

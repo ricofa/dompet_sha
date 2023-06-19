@@ -255,7 +255,9 @@ class _HomePageState extends State<HomePage> {
               MenuServicesWidget(
                 urlIcon: 'assets/icons/ic_transfer.png',
                 title: 'Transfer',
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/transfer');
+                },
               ),
               MenuServicesWidget(
                 urlIcon: 'assets/icons/ic_withdraw.png',
