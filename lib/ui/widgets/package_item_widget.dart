@@ -1,4 +1,5 @@
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/shared/utilities.dart';
 import 'package:flutter/material.dart';
 
 class PackageItemWidget extends StatelessWidget {
@@ -32,7 +33,7 @@ class PackageItemWidget extends StatelessWidget {
             height: 2,
           ),
           Text(
-            'Rp ${price}',
+            formatCurrency(price),
             style: greyTextStyle.copyWith(fontSize: 12),
           )
         ],

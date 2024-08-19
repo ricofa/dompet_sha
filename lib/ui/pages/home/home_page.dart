@@ -1,4 +1,5 @@
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/shared/utilities.dart';
 import 'package:dompet_sha/ui/widgets/latest_transaction_widget.dart';
 import 'package:dompet_sha/ui/widgets/menu_services_widget.dart';
 import 'package:dompet_sha/ui/widgets/tips_widget.dart';
@@ -179,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             style: whiteTextStyle,
           ),
           Text(
-            'Rp 12.500',
+            formatCurrency(12500),
             style: whiteTextStyle.copyWith(fontWeight: semiBold, fontSize: 24),
           )
         ],
@@ -207,7 +208,7 @@ class _HomePageState extends State<HomePage> {
                 style: greenTextStyle.copyWith(fontWeight: semiBold),
               ),
               Text(
-                'of Rp 20.000',
+                'of ${formatCurrency(20000)}',
                 style: blackTextStyle.copyWith(fontWeight: semiBold),
               ),
             ],
@@ -301,27 +302,27 @@ class _HomePageState extends State<HomePage> {
               color: whiteColor,
             ),
             child: Column(
-              children: const [
+              children: [
                 LatestTransactionWidget(
                     urlIcon: 'assets/icons/ic_topup_color.png',
                     title: 'Top Up',
                     time: 'Yesterday',
-                    amount: '+ 450.000'),
+                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
                 LatestTransactionWidget(
                     urlIcon: 'assets/icons/ic_transfer_color.png',
                     title: 'Transfer',
                     time: 'Sep 11',
-                    amount: '+ 450.000'),
+                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
                 LatestTransactionWidget(
                     urlIcon: 'assets/icons/ic_withdraw_color.png',
                     title: 'Top Up',
                     time: 'Yesterday',
-                    amount: '+ 450.000'),
+                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
                 LatestTransactionWidget(
                     urlIcon: 'assets/icons/ic_topup_color.png',
                     title: 'Top Up',
                     time: 'Yesterday',
-                    amount: '+ 450.000'),
+                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
               ],
             ),
           )

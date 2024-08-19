@@ -1,4 +1,5 @@
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/shared/utilities.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:dompet_sha/ui/widgets/item_data_provider_widget.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _DataProviderPageState extends State<DataProviderPage> {
                         fontSize: 16, fontWeight: medium),
                   ),
                   Text(
-                    'Balance Rp 100.000.000',
+                    'Balance ${formatCurrency(18000000)}',
                     style: greyTextStyle.copyWith(fontSize: 12),
                   ),
                 ],
