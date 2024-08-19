@@ -5,6 +5,9 @@ import 'package:dompet_sha/ui/pages/auth/sign_up_set_idcard.dart';
 import 'package:dompet_sha/ui/pages/auth/sign_up_set_profile.dart';
 import 'package:dompet_sha/ui/pages/auth/sign_up_success_page.dart';
 import 'package:dompet_sha/ui/pages/home/home_page.dart';
+import 'package:dompet_sha/ui/pages/more/data_package_page.dart';
+import 'package:dompet_sha/ui/pages/more/data_provider_page.dart';
+import 'package:dompet_sha/ui/pages/more/data_success_page.dart';
 import 'package:dompet_sha/ui/pages/onboarding_page.dart';
 import 'package:dompet_sha/ui/pages/pin_page.dart';
 import 'package:dompet_sha/ui/pages/profile/profile_edit_page.dart';
@@ -62,6 +65,9 @@ class MyApp extends StatelessWidget {
         '/transfer': (context) => const TransferPage(),
         '/transfer-amount': (context) => const TransferAmountPage(),
         '/transfer-success': (context) => const TransferSuccessPage(),
+        '/data-provider': (context) => const DataProviderPage(),
+        '/data-package': (context) => const DataPackagePage(),
+        '/data-success': (context) => const DataSuccessPage(),
       },
     );
   }

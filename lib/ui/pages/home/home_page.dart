@@ -267,7 +267,11 @@ class _HomePageState extends State<HomePage> {
               MenuServicesWidget(
                 urlIcon: 'assets/icons/ic_more.png',
                 title: 'More',
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) => const MoreDialog());
+                },
               ),
             ],
           )
@@ -384,9 +388,9 @@ class _HomePageState extends State<HomePage> {
             runSpacing: 18,
             children: const [
               TipsWidget(
-                  urlImage: 'assets/images/img_tips1.png',
-                  title: 'Coba lakukan tips ini untuk transfer aman',
-                  urlTips: 'https://www.google.com/',
+                urlImage: 'assets/images/img_tips1.png',
+                title: 'Coba lakukan tips ini untuk transfer aman',
+                urlTips: 'https://www.google.com/',
               ),
               TipsWidget(
                 urlImage: 'assets/images/img_tips2.png',
@@ -406,6 +410,79 @@ class _HomePageState extends State<HomePage> {
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class MoreDialog extends StatelessWidget {
+  const MoreDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
+      alignment: Alignment.bottomCenter,
+      content: Container(
+        padding: const EdgeInsets.all(30),
+        height: 326,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(40),
+          color: greyBackgroundColor,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Do More With Us',
+              style:
+                  blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
+            ),
+            const SizedBox(
+              height: 13,
+            ),
+            Wrap(
+              spacing: 29,
+              runSpacing: 25,
+              children: [
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_data.png',
+                  title: 'Data',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/data-provider');
+                  },
+                ),
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_water.png',
+                  title: 'Water',
+                  onTap: () {},
+                ),
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_stream.png',
+                  title: 'Stream',
+                  onTap: () {},
+                ),
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_movie.png',
+                  title: 'Movie',
+                  onTap: () {},
+                ),
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_food.png',
+                  title: 'Food',
+                  onTap: () {},
+                ),
+                MenuServicesWidget(
+                  urlIcon: 'assets/icons/ic_travel.png',
+                  title: 'Travel',
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
