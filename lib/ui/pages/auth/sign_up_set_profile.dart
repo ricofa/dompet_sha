@@ -1,16 +1,34 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:dompet_sha/models/sign_up_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/shared/utilities.dart';
+import 'package:dompet_sha/ui/pages/auth/sign_up_set_idcard.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:dompet_sha/ui/widgets/form_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignUpSetProfile extends StatefulWidget {
-  const SignUpSetProfile({Key? key}) : super(key: key);
+  final SignUpModel data;
+  const SignUpSetProfile({Key? key, required this.data}) : super(key: key);
 
   @override
   State<SignUpSetProfile> createState() => _SignUpSetProfileState();
 }
 
 class _SignUpSetProfileState extends State<SignUpSetProfile> {
+  final pinController = TextEditingController(text: '');
+  XFile? selectedImage;
+
+  bool validate() {
+    if (pinController.text.length != 6) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,24 +59,43 @@ class _SignUpSetProfileState extends State<SignUpSetProfile> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: () async {
+                    final image = await selectImage();
+                    setState(() {
+                      selectedImage = image;
+                    });
+                  },
+                  child: Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: greyBackgroundColor,
+                      image: selectedImage == null
+                          ? null
+                          : DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(
+                                File(selectedImage!.path),
+                              ),
+                            ),
+                    ),
+                    child: selectedImage != null
+                        ? null
+                        : Center(
+                            child: Image.asset('assets/icons/ic_upload.png',
+                                width: 32),
+                          ),
+                  ),
+                ),
                 // Container(
                 //   height: 120,
                 //   width: 120,
-                //   decoration: BoxDecoration(
-                //       shape: BoxShape.circle, color: greyBackgroundColor),
-                //   child: Center(
-                //     child: Image.asset('assets/icons/ic_upload.png', width: 32),
-                //   ),
+                //   decoration: const BoxDecoration(
+                //       shape: BoxShape.circle,
+                //       image: ),
                 // ),
-                Container(
-                  height: 120,
-                  width: 120,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage(
-                              'assets/images/img_default_profile.png'))),
-                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -72,7 +109,9 @@ class _SignUpSetProfileState extends State<SignUpSetProfile> {
                 ),
                 FormFieldWidget(
                   title: 'Set PIN (6 digit number)',
+                  controller: pinController,
                   obscureText: true,
+                  keyboardType: TextInputType.number,
                 ),
                 const SizedBox(
                   height: 30,
@@ -80,7 +119,23 @@ class _SignUpSetProfileState extends State<SignUpSetProfile> {
                 ButtonWidget(
                   title: 'Continue',
                   onPressed: () {
-                    Navigator.pushNamed(context, '/sign-up-set-idcard');
+                    if (validate()) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SignUpSetIdCard(
+                            data: widget.data.copyWith(
+                              pin: pinController.text,
+                              profilePict: selectedImage == null
+                                  ? null
+                                  : 'data:image/png;base64,${base64Encode(File(selectedImage!.path).readAsBytesSync())}',
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      showCustomSnackbar(context, 'PIN harus 6 digit');
+                    }
                   },
                 ),
               ],
