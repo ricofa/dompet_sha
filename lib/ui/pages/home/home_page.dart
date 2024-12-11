@@ -1,3 +1,4 @@
+import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/shared/utilities.dart';
 import 'package:dompet_sha/ui/widgets/latest_transaction_widget.dart';
@@ -5,6 +6,7 @@ import 'package:dompet_sha/ui/widgets/menu_services_widget.dart';
 import 'package:dompet_sha/ui/widgets/tips_widget.dart';
 import 'package:dompet_sha/ui/widgets/user_send_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,9 +34,9 @@ class _HomePageState extends State<HomePage> {
               showSelectedLabels: true,
               showUnselectedLabels: true,
               selectedLabelStyle:
-                  blueTextStyle.copyWith(fontSize: 10, fontWeight: medium),
+              blueTextStyle.copyWith(fontSize: 10, fontWeight: medium),
               unselectedLabelStyle:
-                  blackTextStyle.copyWith(fontSize: 10, fontWeight: medium),
+              blackTextStyle.copyWith(fontSize: 10, fontWeight: medium),
               items: [
                 BottomNavigationBarItem(
                     icon: Image.asset(
@@ -75,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           children: [
-            profile(),
+            profile(context),
             walletCard(),
             levelBar(),
             servicesMenu(),
@@ -86,105 +88,126 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Widget profile() {
-    return Container(
-      margin: const EdgeInsets.only(top: 40),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Howdy,',
-                style: greyTextStyle.copyWith(fontSize: 16),
-              ),
-              const SizedBox(
-                height: 2,
-              ),
-              Text(
-                'Shaynaaaaa',
-                style:
-                    blackTextStyle.copyWith(fontSize: 20, fontWeight: semiBold),
-              ),
-            ],
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, '/profile');
-            },
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image:
-                          AssetImage('assets/images/img_default_profile.png'))),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: whiteColor,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.check_circle,
-                      color: greenColor,
-                      size: 14,
+  Widget profile(BuildContext context) {
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if (state is AuthSuccess) {
+          return Container(
+            margin: const EdgeInsets.only(top: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Howdy,',
+                      style: greyTextStyle.copyWith(fontSize: 16),
                     ),
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      state.user.username.toString(),
+                      style:
+                      blackTextStyle.copyWith(
+                          fontSize: 20, fontWeight: semiBold),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/profile');
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: state.user.profilePict == null
+                              ? const AssetImage(
+                              'assets/images/img_default_profile.png')
+                              : NetworkImage(state.user.profilePict!)
+                          as ImageProvider),
+                    ),
+                    child: state.user.verified == 1 ? Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: whiteColor,
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.check_circle,
+                            color: greenColor,
+                            size: 14,
+                          ),
+                        ),
+                      ),
+                    ) : null,
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
+          );
+        }
+        return Container();
+      },
     );
   }
 
   Widget walletCard() {
-    return Container(
-      width: double.infinity,
-      height: 220,
-      margin: const EdgeInsets.only(top: 30),
-      padding: const EdgeInsets.all(30),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(28),
-          image: const DecorationImage(
-              image: AssetImage('assets/images/img_card.png'),
-              fit: BoxFit.cover)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Hai Shayna',
-            style: whiteTextStyle.copyWith(fontSize: 16, fontWeight: medium),
-          ),
-          const SizedBox(
-            height: 28,
-          ),
-          Text(
-            '**** **** **** 1234',
-            style: whiteTextStyle.copyWith(
-                fontSize: 16, fontWeight: medium, letterSpacing: 6),
-          ),
-          const SizedBox(
-            height: 21,
-          ),
-          Text(
-            'Balance',
-            style: whiteTextStyle,
-          ),
-          Text(
-            formatCurrency(12500),
-            style: whiteTextStyle.copyWith(fontWeight: semiBold, fontSize: 24),
-          )
-        ],
-      ),
+    return BlocBuilder<AuthBloc, AuthState>(
+      builder: (context, state) {
+        if(state is AuthSuccess){
+          return Container(
+            width: double.infinity,
+            height: 220,
+            margin: const EdgeInsets.only(top: 30),
+            padding: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(28),
+                image: const DecorationImage(
+                    image: AssetImage('assets/images/img_card.png'),
+                    fit: BoxFit.cover)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  state.user.name.toString(),
+                  style: whiteTextStyle.copyWith(
+                      fontSize: 16, fontWeight: medium),
+                ),
+                const SizedBox(
+                  height: 28,
+                ),
+                Text(
+                  '**** **** **** ${state.user.cardNumber!.substring(12, 16)}',
+                  style: whiteTextStyle.copyWith(
+                      fontSize: 16, fontWeight: medium, letterSpacing: 6),
+                ),
+                const SizedBox(
+                  height: 21,
+                ),
+                Text(
+                  'Balance',
+                  style: whiteTextStyle,
+                ),
+                Text(
+                  formatCurrency(state.user.balance ?? 0),
+                  style: whiteTextStyle.copyWith(
+                      fontWeight: semiBold, fontSize: 24),
+                )
+              ],
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 
@@ -428,7 +451,10 @@ class MoreDialog extends StatelessWidget {
       content: Container(
         padding: const EdgeInsets.all(30),
         height: 326,
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: greyBackgroundColor,
@@ -439,7 +465,7 @@ class MoreDialog extends StatelessWidget {
             Text(
               'Do More With Us',
               style:
-                  blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
+              blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(
               height: 13,

@@ -1,7 +1,13 @@
+import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
+import 'package:dompet_sha/blocs/payment_method/payment_method_bloc.dart';
+import 'package:dompet_sha/models/payment_method_model.dart';
+import 'package:dompet_sha/models/topup_form_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/ui/pages/topup/topup_amount_page.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:dompet_sha/ui/widgets/select_bank_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TopUpPage extends StatefulWidget {
   const TopUpPage({Key? key}) : super(key: key);
@@ -11,6 +17,8 @@ class TopUpPage extends StatefulWidget {
 }
 
 class _TopUpPageState extends State<TopUpPage> {
+  PaymentMethodModel? selectedPayment;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,33 +38,41 @@ class _TopUpPageState extends State<TopUpPage> {
           const SizedBox(
             height: 10,
           ),
-          Row(
-            children: [
-              Image.asset(
-                'assets/images/img_wallet.png',
-                width: 80,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '8000 8000 8888',
-                    style: blackTextStyle.copyWith(
-                        fontSize: 16, fontWeight: medium),
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
-                  Text(
-                    'Rico FA',
-                    style: greyTextStyle.copyWith(fontSize: 12),
-                  )
-                ],
-              )
-            ],
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              if (state is AuthSuccess) {
+                return Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/img_wallet.png',
+                      width: 80,
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.user.cardNumber!.replaceAllMapped(
+                              RegExp(r".{4}"), (match) => "${match.group(0)} "),
+                          style: blackTextStyle.copyWith(
+                              fontSize: 16, fontWeight: medium),
+                        ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        Text(
+                          state.user.name.toString(),
+                          style: greyTextStyle.copyWith(fontSize: 12),
+                        )
+                      ],
+                    )
+                  ],
+                );
+              }
+              return Container();
+            },
           ),
           const SizedBox(
             height: 40,
@@ -68,21 +84,59 @@ class _TopUpPageState extends State<TopUpPage> {
           const SizedBox(
             height: 14,
           ),
-          SelectBankWidget(
-              title: 'Bank BCA', imageUrl: 'assets/images/img_bca.png', isSelected: true,),
-          SelectBankWidget(
-              title: 'Bank BNI', imageUrl: 'assets/images/img_bni.png'),
-          SelectBankWidget(
-              title: 'Bank Mandiri', imageUrl: 'assets/images/img_mandiri.png'),
-          SelectBankWidget(
-              title: 'Bank OCBC', imageUrl: 'assets/images/img_ocbc.png'),
-          const SizedBox(height: 12,),
-          ButtonWidget(title: 'Continue', onPressed: (){
-            Navigator.pushNamed(context, '/topup-amount');
-          },),
-          const SizedBox(height: 57,)
+          BlocProvider(
+            create: (context) => PaymentMethodBloc()..add(GetPaymentMethod()),
+            child: BlocBuilder<PaymentMethodBloc, PaymentMethodState>(
+              builder: (context, state) {
+                if (state is PaymentMethodSuccess) {
+                  return Column(
+                    children: state.paymentMethods
+                        .map((paymentMethod) => GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedPayment = paymentMethod;
+                                });
+                              },
+                              child: SelectBankWidget(
+                                paymentMethodModel: paymentMethod,
+                                isSelected:
+                                    paymentMethod.id == selectedPayment?.id,
+                              ),
+                            ))
+                        .toList(),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 12,
+          ),
         ],
       ),
+      floatingActionButton: (selectedPayment != null)
+          ? Container(
+        margin: const EdgeInsets.all(24),
+            child: ButtonWidget(
+                title: 'Continue',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TopUpAmountPage(
+                        topupFormModel: TopupFormModel(
+                            paymentMethodCode: selectedPayment?.code),
+                      ),
+                    ),
+                  );
+                },
+              ),
+          )
+          : Container(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

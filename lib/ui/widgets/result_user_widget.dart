@@ -1,19 +1,12 @@
+import 'package:dompet_sha/models/user_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:flutter/material.dart';
 
 class ResultUserWidget extends StatelessWidget {
-  final String imageUrl;
-  final String name;
-  final String username;
-  final bool isVerified;
+  final UserModel userModel;
   final bool isSelected;
   const ResultUserWidget(
-      {Key? key,
-      required this.imageUrl,
-      required this.name,
-      required this.username,
-      this.isVerified = false,
-      this.isSelected = false})
+      {Key? key, required this.userModel, this.isSelected = false})
       : super(key: key);
 
   @override
@@ -23,22 +16,24 @@ class ResultUserWidget extends StatelessWidget {
       width: 155,
       height: 175,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: whiteColor,
-        border: Border.all(
-          color: isSelected ? blueColor : whiteColor,
-          width: 2
-        )
-      ),
+          borderRadius: BorderRadius.circular(20),
+          color: whiteColor,
+          border:
+              Border.all(color: isSelected ? blueColor : whiteColor, width: 2)),
       child: Column(
         children: [
           Container(
             width: 70,
             height: 70,
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(image: AssetImage(imageUrl))),
-            child: isVerified
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  image: userModel.profilePict == null
+                      ? const AssetImage(
+                          'assets/images/img_default_profile.png')
+                      : NetworkImage(userModel.profilePict!) as ImageProvider),
+            ),
+            child: userModel.verified == 1
                 ? Align(
                     alignment: Alignment.topRight,
                     child: Container(
@@ -63,14 +58,14 @@ class ResultUserWidget extends StatelessWidget {
             height: 13,
           ),
           Text(
-            name,
+            userModel.name.toString(),
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           ),
           const SizedBox(
             height: 2,
           ),
           Text(
-            '@$username',
+            '@${userModel.username}',
             style: greyTextStyle.copyWith(fontSize: 12),
           )
         ],

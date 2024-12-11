@@ -7,12 +7,17 @@ class FormFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final bool isShowTitle;
   final TextInputType? keyboardType;
+  final VoidCallback? onToggleVisibility;
+  final Function(String)? onFieldSubmitted;
   const FormFieldWidget(
       {Key? key,
       required this.title,
       this.obscureText = false,
       this.controller,
-      this.isShowTitle = true, this.keyboardType})
+      this.onToggleVisibility,
+      this.isShowTitle = true,
+      this.keyboardType,
+      this.onFieldSubmitted})
       : super(key: key);
 
   @override
@@ -36,10 +41,21 @@ class FormFieldWidget extends StatelessWidget {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             hintText: !isShowTitle ? title : null,
-              contentPadding: const EdgeInsets.all(12),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-              )),
+            contentPadding: const EdgeInsets.all(12),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            suffixIcon: obscureText
+                ? IconButton(
+                    icon: Icon(
+                      obscureText ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed:
+                        onToggleVisibility, // Memanggil callback untuk toggle
+                  )
+                : null,
+          ),
+          onFieldSubmitted: onFieldSubmitted,
         ),
       ],
     );
