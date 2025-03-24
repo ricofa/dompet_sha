@@ -1,11 +1,11 @@
+import 'package:dompet_sha/models/operator_card_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:flutter/material.dart';
 
 class ItemDataProviderWidget extends StatelessWidget {
-  final String name;
-  final String imageUrl;
+  final OperatorCardModel operatorCardModel;
   final bool isSelected;
-  const ItemDataProviderWidget({super.key, required this.name, required this.imageUrl, this.isSelected = false});
+  const ItemDataProviderWidget({super.key, required this.operatorCardModel, this.isSelected = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +20,20 @@ class ItemDataProviderWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Image.asset(
-            imageUrl,
+          Image.network(
+            operatorCardModel.thumbnail.toString(),
             height: 30,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                name,
+                operatorCardModel.name.toString(),
                 style:
                     blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
               ),
               Text(
-                'Available',
+                operatorCardModel.status.toString(),
                 style: greyTextStyle.copyWith(fontSize: 12),
               )
             ],

@@ -1,12 +1,12 @@
+import 'package:dompet_sha/models/data_plan_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/shared/utilities.dart';
 import 'package:flutter/material.dart';
 
 class PackageItemWidget extends StatelessWidget {
-  final int amountData;
-  final int price;
+  final DataPlanModel dataPlanModel;
   final bool isSelected;
-  const PackageItemWidget({super.key, required this.amountData, required this.price, this.isSelected = false});
+  const PackageItemWidget({super.key, required this.dataPlanModel, this.isSelected = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +26,14 @@ class PackageItemWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '${amountData}GB',
+            dataPlanModel.name.toString(),
             style: blackTextStyle.copyWith(fontSize: 32, fontWeight: medium),
           ),
           const SizedBox(
             height: 2,
           ),
           Text(
-            formatCurrency(price),
+            formatCurrency(dataPlanModel.price ?? 0),
             style: greyTextStyle.copyWith(fontSize: 12),
           )
         ],

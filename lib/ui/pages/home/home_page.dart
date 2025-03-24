@@ -1,6 +1,10 @@
 import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
+import 'package:dompet_sha/blocs/transaction/transaction_bloc.dart';
+import 'package:dompet_sha/blocs/user/user_bloc.dart';
+import 'package:dompet_sha/models/transfer_form_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/shared/utilities.dart';
+import 'package:dompet_sha/ui/pages/transfer/transfer_amount_page.dart';
 import 'package:dompet_sha/ui/widgets/latest_transaction_widget.dart';
 import 'package:dompet_sha/ui/widgets/menu_services_widget.dart';
 import 'package:dompet_sha/ui/widgets/tips_widget.dart';
@@ -34,9 +38,9 @@ class _HomePageState extends State<HomePage> {
               showSelectedLabels: true,
               showUnselectedLabels: true,
               selectedLabelStyle:
-              blueTextStyle.copyWith(fontSize: 10, fontWeight: medium),
+                  blueTextStyle.copyWith(fontSize: 10, fontWeight: medium),
               unselectedLabelStyle:
-              blackTextStyle.copyWith(fontSize: 10, fontWeight: medium),
+                  blackTextStyle.copyWith(fontSize: 10, fontWeight: medium),
               items: [
                 BottomNavigationBarItem(
                     icon: Image.asset(
@@ -109,8 +113,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Text(
                       state.user.username.toString(),
-                      style:
-                      blackTextStyle.copyWith(
+                      style: blackTextStyle.copyWith(
                           fontSize: 20, fontWeight: semiBold),
                     ),
                   ],
@@ -127,28 +130,30 @@ class _HomePageState extends State<HomePage> {
                       image: DecorationImage(
                           image: state.user.profilePict == null
                               ? const AssetImage(
-                              'assets/images/img_default_profile.png')
+                                  'assets/images/img_default_profile.png')
                               : NetworkImage(state.user.profilePict!)
-                          as ImageProvider),
+                                  as ImageProvider),
                     ),
-                    child: state.user.verified == 1 ? Align(
-                      alignment: Alignment.topRight,
-                      child: Container(
-                        width: 16,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: whiteColor,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.check_circle,
-                            color: greenColor,
-                            size: 14,
-                          ),
-                        ),
-                      ),
-                    ) : null,
+                    child: state.user.verified == 1
+                        ? Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              width: 16,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: whiteColor,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  Icons.check_circle,
+                                  color: greenColor,
+                                  size: 14,
+                                ),
+                              ),
+                            ),
+                          )
+                        : null,
                   ),
                 ),
               ],
@@ -163,7 +168,7 @@ class _HomePageState extends State<HomePage> {
   Widget walletCard() {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-        if(state is AuthSuccess){
+        if (state is AuthSuccess) {
           return Container(
             width: double.infinity,
             height: 220,
@@ -179,8 +184,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   state.user.name.toString(),
-                  style: whiteTextStyle.copyWith(
-                      fontSize: 16, fontWeight: medium),
+                  style:
+                      whiteTextStyle.copyWith(fontSize: 16, fontWeight: medium),
                 ),
                 const SizedBox(
                   height: 28,
@@ -324,29 +329,24 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(20),
               color: whiteColor,
             ),
-            child: Column(
-              children: [
-                LatestTransactionWidget(
-                    urlIcon: 'assets/icons/ic_topup_color.png',
-                    title: 'Top Up',
-                    time: 'Yesterday',
-                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
-                LatestTransactionWidget(
-                    urlIcon: 'assets/icons/ic_transfer_color.png',
-                    title: 'Transfer',
-                    time: 'Sep 11',
-                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
-                LatestTransactionWidget(
-                    urlIcon: 'assets/icons/ic_withdraw_color.png',
-                    title: 'Top Up',
-                    time: 'Yesterday',
-                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
-                LatestTransactionWidget(
-                    urlIcon: 'assets/icons/ic_topup_color.png',
-                    title: 'Top Up',
-                    time: 'Yesterday',
-                    amount: '+ ${formatCurrency(450000, symbol: '')}'),
-              ],
+            child: BlocProvider(
+              create: (context) => TransactionBloc()..add(TransactionGet()),
+              child: BlocBuilder<TransactionBloc, TransactionState>(
+                builder: (context, state) {
+                  if (state is TransactionSuccess) {
+                    return Column(
+                      children: state.transactions
+                          .map((transaction) =>
+                              LatestTransactionWidget(transaction: transaction))
+                          .toList(),
+                    );
+                  }
+
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
             ),
           )
         ],
@@ -367,26 +367,37 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 14,
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: const [
-                UserSendWidget(
-                    urlImage: 'assets/images/img_friend1.png',
-                    userName: 'yuanita'),
-                UserSendWidget(
-                    urlImage: 'assets/images/img_friend2.png',
-                    userName: 'ismail'),
-                UserSendWidget(
-                    urlImage: 'assets/images/img_friend3.png',
-                    userName: 'jamal'),
-                UserSendWidget(
-                    urlImage: 'assets/images/img_friend4.png',
-                    userName: 'meimei'),
-                UserSendWidget(
-                    urlImage: 'assets/images/img_friend4.png',
-                    userName: 'meimei')
-              ],
+          BlocProvider(
+            create: (context) => UserBloc()..add(UserGetRecent()),
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: ((context, state) {
+                if (state is UserSuccess) {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: state.users.map((user) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransferAmountPage(
+                                  data:
+                                      TransferFormModel(sendTo: user.username),
+                                ),
+                              ),
+                            );
+                          },
+                          child: UserSendWidget(user: user),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
             ),
           )
         ],
@@ -451,10 +462,7 @@ class MoreDialog extends StatelessWidget {
       content: Container(
         padding: const EdgeInsets.all(30),
         height: 326,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: greyBackgroundColor,
@@ -465,7 +473,7 @@ class MoreDialog extends StatelessWidget {
             Text(
               'Do More With Us',
               style:
-              blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
+                  blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(
               height: 13,

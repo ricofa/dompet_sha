@@ -1,17 +1,12 @@
+import 'package:dompet_sha/models/transaction_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
+import 'package:dompet_sha/shared/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class LatestTransactionWidget extends StatelessWidget {
-  final String urlIcon;
-  final String title;
-  final String time;
-  final String amount;
-  const LatestTransactionWidget(
-      {Key? key,
-      required this.urlIcon,
-      required this.title,
-      required this.time,
-      required this.amount})
+  final TransactionModel transaction;
+  const LatestTransactionWidget({Key? key, required this.transaction})
       : super(key: key);
 
   @override
@@ -21,7 +16,7 @@ class LatestTransactionWidget extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            urlIcon,
+            'assets/icons/ic_withdraw_color.png',
             width: 48,
           ),
           const SizedBox(
@@ -32,7 +27,7 @@ class LatestTransactionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  transaction.transactionType!.name.toString(),
                   style:
                       blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
                 ),
@@ -40,14 +35,17 @@ class LatestTransactionWidget extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  time,
+                  DateFormat('MMM dd')
+                      .format(transaction.createdAt ?? DateTime.now()),
                   style: greyTextStyle.copyWith(fontSize: 12),
                 ),
               ],
             ),
           ),
           Text(
-            amount,
+            formatCurrency(transaction.amount ?? 0,
+                symbol:
+                    transaction.transactionType?.action == 'cr' ? '+ ' : '- '),
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           )
         ],

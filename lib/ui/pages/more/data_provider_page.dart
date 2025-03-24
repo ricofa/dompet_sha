@@ -1,8 +1,13 @@
+import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
+import 'package:dompet_sha/blocs/operator_card/operator_card_bloc.dart';
+import 'package:dompet_sha/models/operator_card_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/shared/utilities.dart';
+import 'package:dompet_sha/ui/pages/more/data_package_page.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:dompet_sha/ui/widgets/item_data_provider_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DataProviderPage extends StatefulWidget {
   const DataProviderPage({super.key});
@@ -12,6 +17,8 @@ class DataProviderPage extends StatefulWidget {
 }
 
 class _DataProviderPageState extends State<DataProviderPage> {
+  OperatorCardModel? selectedOperator;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,19 +47,27 @@ class _DataProviderPageState extends State<DataProviderPage> {
               const SizedBox(
                 width: 16,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '8000 2298 1996',
-                    style: blackTextStyle.copyWith(
-                        fontSize: 16, fontWeight: medium),
-                  ),
-                  Text(
-                    'Balance ${formatCurrency(18000000)}',
-                    style: greyTextStyle.copyWith(fontSize: 12),
-                  ),
-                ],
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is AuthSuccess) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.user.cardNumber!.replaceAllMapped(
+                              RegExp(r".{4}"), (match) => "${match.group(0)} "),
+                          style: blackTextStyle.copyWith(
+                              fontSize: 16, fontWeight: medium),
+                        ),
+                        Text(
+                          'Balance ${formatCurrency(state.user.balance ?? 0)}',
+                          style: greyTextStyle.copyWith(fontSize: 12),
+                        ),
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               )
             ],
           ),
@@ -66,29 +81,57 @@ class _DataProviderPageState extends State<DataProviderPage> {
           const SizedBox(
             height: 14,
           ),
-          const ItemDataProviderWidget(
-            name: 'Telkomsel',
-            imageUrl: 'assets/images/img_tsel.png',
-            isSelected: true,
-          ),
-          const ItemDataProviderWidget(
-              name: 'Indosat', imageUrl: 'assets/images/img_indosat.png'),
-          const ItemDataProviderWidget(
-              name: 'Singtel ID', imageUrl: 'assets/images/img_singtel.png'),
-          const SizedBox(
-            height: 135,
-          ),
-          ButtonWidget(
-            title: 'Continue',
-            onPressed: () {
-              Navigator.pushNamed(context, '/data-package');
-            },
+          BlocProvider(
+            create: (context) => OperatorCardBloc()..add(GetOperatorCard()),
+            child: BlocBuilder<OperatorCardBloc, OperatorCardState>(
+              builder: (context, state) {
+                if (state is OperatorCardSuccess) {
+                  return Column(
+                    children: state.operatorCard.map((operator) {
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedOperator = operator;
+                          });
+                        },
+                        child: ItemDataProviderWidget(
+                          operatorCardModel: operator,
+                          isSelected: operator.id == selectedOperator?.id,
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           ),
           const SizedBox(
             height: 57,
           ),
         ],
       ),
+      floatingActionButton: (selectedOperator != null)
+          ? Container(
+              margin: const EdgeInsets.all(24),
+              child: ButtonWidget(
+                title: 'Continue',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DataPackagePage(
+                        operatorCardModel: selectedOperator!,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          : Container(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

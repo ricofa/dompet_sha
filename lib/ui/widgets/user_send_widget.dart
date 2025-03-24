@@ -1,12 +1,13 @@
+import 'package:dompet_sha/models/user_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:flutter/material.dart';
 
 class UserSendWidget extends StatelessWidget {
-  final String urlImage;
-  final String userName;
-  const UserSendWidget(
-      {Key? key, required this.urlImage, required this.userName})
-      : super(key: key);
+  final UserModel user;
+  const UserSendWidget({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +25,21 @@ class UserSendWidget extends StatelessWidget {
             height: 45,
             margin: const EdgeInsets.only(bottom: 13),
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: AssetImage(urlImage))),
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: user.profilePict == null
+                      ? const AssetImage(
+                          'assets/images/img_default_profile.png')
+                      : NetworkImage(user.profilePict!) as ImageProvider),
+            ),
           ),
-          Text(
-            '@$userName',
-            style: blackTextStyle.copyWith(fontWeight: medium, fontSize: 12),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              '${user.name}',
+              style: blackTextStyle.copyWith(fontWeight: medium, fontSize: 12),
+            ),
           )
         ],
       ),
