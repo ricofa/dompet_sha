@@ -1,24 +1,22 @@
+import 'package:dompet_sha/models/tip_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TipsWidget extends StatelessWidget {
-  final String urlImage;
-  final String title;
-  final String urlTips;
+  final TipModel tip;
+  
   const TipsWidget(
       {Key? key,
-      required this.urlImage,
-      required this.title,
-      required this.urlTips})
+      required this.tip})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        if(await canLaunchUrl(Uri.parse(urlTips))){
-          launchUrl(Uri.parse(urlTips));
+        if(await canLaunchUrl(Uri.parse(tip.url.toString()))){
+          launchUrl(Uri.parse(tip.url.toString()));
         }
       },
       child: Container(
@@ -32,8 +30,8 @@ class TipsWidget extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-              child: Image.asset(
-                urlImage,
+              child: Image.network(
+                tip.thumbnail.toString(),
                 width: 155,
                 height: 110,
                 fit: BoxFit.cover,
@@ -45,7 +43,7 @@ class TipsWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Text(
-                title,
+                tip.title.toString(),
                 style: blackTextStyle.copyWith(
                   fontWeight: medium,
                   overflow: TextOverflow.ellipsis,

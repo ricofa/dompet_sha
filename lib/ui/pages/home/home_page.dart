@@ -1,4 +1,5 @@
 import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
+import 'package:dompet_sha/blocs/bloc/tip_bloc.dart';
 import 'package:dompet_sha/blocs/transaction/transaction_bloc.dart';
 import 'package:dompet_sha/blocs/user/user_bloc.dart';
 import 'package:dompet_sha/models/transfer_form_model.dart';
@@ -418,31 +419,25 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 14,
           ),
-          Wrap(
-            spacing: 17,
-            runSpacing: 18,
-            children: const [
-              TipsWidget(
-                urlImage: 'assets/images/img_tips1.png',
-                title: 'Coba lakukan tips ini untuk transfer aman',
-                urlTips: 'https://www.google.com/',
-              ),
-              TipsWidget(
-                urlImage: 'assets/images/img_tips2.png',
-                title: 'Coba lakukan tips ini untuk transfer aman',
-                urlTips: 'https://www.google.com/',
-              ),
-              TipsWidget(
-                urlImage: 'assets/images/img_tips3.png',
-                title: 'Coba lakukan tips ini untuk transfer aman',
-                urlTips: 'https://www.google.com/',
-              ),
-              TipsWidget(
-                urlImage: 'assets/images/img_tips4.png',
-                title: 'Coba lakukan tips ini untuk transfer aman',
-                urlTips: 'https://www.google.com/',
-              ),
-            ],
+          BlocProvider(
+            create: (context) => TipBloc()..add(TipGet()),
+            child: BlocBuilder<TipBloc, TipState>(
+              builder: (context, state) {
+                if (state is TipSuccess) {
+                  return Wrap(
+                    spacing: 17,
+                    runSpacing: 18,
+                    children: state.tips.map((tip) {
+                      return TipsWidget(tip: tip);
+                    }).toList(),
+                  );
+                }
+
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
           )
         ],
       ),

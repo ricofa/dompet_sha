@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:dompet_sha/blocs/auth/auth_bloc.dart';
 import 'package:dompet_sha/shared/theme.dart';
-import 'package:dompet_sha/ui/pages/onboarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

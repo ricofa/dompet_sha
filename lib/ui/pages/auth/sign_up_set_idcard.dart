@@ -6,7 +6,6 @@ import 'package:dompet_sha/models/sign_up_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:dompet_sha/shared/utilities.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
-import 'package:dompet_sha/ui/widgets/form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';

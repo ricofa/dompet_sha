@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dompet_sha/shared/theme.dart';
-import 'package:dompet_sha/ui/pages/auth/sign_in_page.dart';
 import 'package:dompet_sha/ui/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 
