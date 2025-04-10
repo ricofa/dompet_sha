@@ -46,6 +46,7 @@ dependencies:
   equatable: ^2.0.5
   image_picker: ^1.0.8
   flutter_secure_storage: ^9.2.2
+  flutter_inappwebview: ^6.0.0
 
 dev_dependencies:
   flutter_test:

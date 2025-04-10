@@ -1,23 +1,32 @@
 import 'package:dompet_sha/models/tip_model.dart';
 import 'package:dompet_sha/shared/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class TipsWidget extends StatelessWidget {
   final TipModel tip;
-  
-  const TipsWidget(
-      {Key? key,
-      required this.tip})
-      : super(key: key);
+
+  const TipsWidget({Key? key, required this.tip}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        if(await canLaunchUrl(Uri.parse(tip.url.toString()))){
-          launchUrl(Uri.parse(tip.url.toString()));
-        }
+      // onTap: () async {
+      //   if (await canLaunchUrl(Uri.parse(tip.url.toString()))) {
+      //     launchUrl(Uri.parse(tip.url.toString()));
+      //   }
+      // },
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WebViewPage(
+              title: tip.title.toString(),
+              url: tip.url.toString(),
+            ),
+          ),
+        );
       },
       child: Container(
         width: 155,
@@ -29,7 +38,8 @@ class TipsWidget extends StatelessWidget {
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
               child: Image.network(
                 tip.thumbnail.toString(),
                 width: 155,
@@ -52,6 +62,37 @@ class TipsWidget extends StatelessWidget {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class WebViewPage extends StatelessWidget {
+  final String title;
+  final String url;
+
+  const WebViewPage({super.key, required this.title, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: blackTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        backgroundColor: whiteColor,
+        iconTheme: IconThemeData(color: blackColor),
+        elevation: 0,
+      ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: WebUri(url)),
+        initialSettings: InAppWebViewSettings(
+          javaScriptEnabled: true,
+          supportZoom: true,
         ),
       ),
     );
