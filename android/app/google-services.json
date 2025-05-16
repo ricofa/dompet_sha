@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "188352908604",
+    "project_id": "dompet-wallet",
+    "storage_bucket": "dompet-wallet.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:188352908604:android:154c265bdb364d4534a239",
+        "android_client_info": {
+          "package_name": "com.dompet.dompet_sha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL4CLjHK68Yim7bzfkZmmyeiEiZ87Wt2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
